@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:simple_weather/modules/home/domain/models/city_weather.dart';
 
-import '../../../../core/utils/app_constants.dart';
+import '../../../../core/env/env.dart';
+import '../../../../core/utils/app_utils.dart';
 import '../../infra/datasources/weather_datasource.dart';
 
 class WeatherDatasourceImpl implements WeatherDatasource {
@@ -16,7 +17,13 @@ class WeatherDatasourceImpl implements WeatherDatasource {
     String cityName, {
     String? uf,
   }) async {
-    final response = await client.get(Uri.parse(AppConstants.BASE_URL));
+    final response = await client.get(Uri.parse(
+      AppUtils.baseUrl(
+        city: cityName,
+        uf: uf ?? 'br',
+        apiKey: Env.apiKey,
+      ),
+    ));
 
     if (response.statusCode != 200) return null;
 
