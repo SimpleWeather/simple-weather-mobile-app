@@ -8,6 +8,7 @@ class CityWeather {
   final double maxTemperature;
   final double minTemperature;
   final double humidity;
+  final String city;
 
   CityWeather({
     required this.weather,
@@ -16,7 +17,12 @@ class CityWeather {
     required this.maxTemperature,
     required this.minTemperature,
     required this.humidity,
+    required this.city,
   });
+
+  static double get _kelvin => 273.15;
+
+  static double _convert(String temp) => double.tryParse(temp) ?? 0 - _kelvin;
 
   factory CityWeather.fromJson(json) {
     final main = json[CityWeatherConstants.main];
@@ -27,9 +33,10 @@ class CityWeather {
       ),
       temperature: main[CityWeatherConstants.temp],
       feelsLike: main[CityWeatherConstants.feelsLike],
-      maxTemperature: main[CityWeatherConstants.maxTemperature],
-      minTemperature: main[CityWeatherConstants.minTemperature],
+      maxTemperature: _convert(main[CityWeatherConstants.maxTemperature]),
+      minTemperature: _convert(main[CityWeatherConstants.minTemperature]),
       humidity: main[CityWeatherConstants.humidity],
+      city: json[CityWeatherConstants.city],
     );
   }
 }

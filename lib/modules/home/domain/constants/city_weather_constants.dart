@@ -6,4 +6,5 @@ abstract class CityWeatherConstants {
   static const maxTemperature = 'temp_max';
   static const feelsLike = 'feels_like';
   static const humidity = 'humidity';
+  static const city = 'city';
 }
