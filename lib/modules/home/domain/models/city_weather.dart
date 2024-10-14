@@ -1,5 +1,19 @@
+import 'dart:convert';
+
 import '../constants/city_weather_constants.dart';
 import 'weather.dart';
+
+class CityWeatherFetch {
+  List<CityWeather> content = [];
+
+  CityWeatherFetch(List<CityWeather> list) {
+    content = list;
+  }
+
+  factory CityWeatherFetch.fromJson(json) => CityWeatherFetch(
+        (json as List).map(CityWeather.fromJson).toList(),
+      );
+}
 
 class CityWeather {
   final WeatherFetch weather;
@@ -23,6 +37,20 @@ class CityWeather {
   static double get _kelvin => 273.15;
 
   static double _convert(String temp) => double.tryParse(temp) ?? 0 - _kelvin;
+
+  Map<String, dynamic> _toMap() => {
+        CityWeatherConstants.weather: weather.toJson(),
+        CityWeatherConstants.city: city,
+        CityWeatherConstants.main: {
+          CityWeatherConstants.feelsLike: feelsLike,
+          CityWeatherConstants.temp: temperature,
+          CityWeatherConstants.minTemperature: minTemperature,
+          CityWeatherConstants.maxTemperature: maxTemperature,
+          CityWeatherConstants.humidity: humidity,
+        },
+      };
+
+  String toJson() => jsonEncode(_toMap());
 
   factory CityWeather.fromJson(json) {
     final main = json[CityWeatherConstants.main];
