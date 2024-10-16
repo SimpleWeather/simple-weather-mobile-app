@@ -19,8 +19,23 @@ class _CityWeatherWidgetState extends State<CityWeatherWidget> {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {},
-      title: Text(
-        widget.cityWeather.city,
+      tileColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+        side: const BorderSide(
+          color: Colors.blueAccent,
+        ),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            widget.cityWeather.city,
+          ),
+          Icon(
+            widget.cityWeather.weatherIcon,
+          ),
+        ],
       ),
       subtitle: widget.cityWeather.weather.content.isEmpty
           ? null

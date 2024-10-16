@@ -23,42 +23,44 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Simple Weather'),
       ),
-      body: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: 8,
-              horizontal: 16,
-            ),
-            child: SearchCityWidget(),
-          ),
-          const SizedBox(height: 14),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (_, index) {
-                return CityWeatherWidget(
-                  cityWeather: CityWeather(
-                    city: 'Salvador',
-                    minTemperature: 27,
-                    maxTemperature: 33,
-                    feelsLike: 28,
-                    humidity: .5,
-                    temperature: 29,
-                    weather: WeatherFetch(
-                      [
-                        Weather(
-                          mainText: 'Muito quente',
-                          description: 'Quente',
-                        ),
-                      ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SearchCityWidget(),
+            const SizedBox(height: 14),
+            Expanded(
+              child: ListView.separated(
+                itemCount: 10,
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemBuilder: (_, index) {
+                  return CityWeatherWidget(
+                    cityWeather: CityWeather(
+                      city: 'Salvador',
+                      minTemperature: 27,
+                      maxTemperature: 33,
+                      feelsLike: 28,
+                      humidity: .5,
+                      temperature: 29,
+                      weather: WeatherFetch(
+                        [
+                          Weather(
+                            mainText: 'Muito quente',
+                            description: 'Quente',
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }

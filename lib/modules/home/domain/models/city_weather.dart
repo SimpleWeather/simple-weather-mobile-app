@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import '../constants/city_weather_constants.dart';
 import 'weather.dart';
 
@@ -37,6 +39,20 @@ class CityWeather {
   static double get _kelvin => 273.15;
 
   static double _convert(String temp) => double.tryParse(temp) ?? 0 - _kelvin;
+
+  IconData? get weatherIcon {
+    final mainText = weather.content.firstOrNull?.mainText;
+
+    if (mainText == null) return null;
+
+    return switch (mainText.toLowerCase()) {
+      'rain' => Icons.sunny_snowing,
+      'snow' => Icons.snowing,
+      'clouds' => Icons.cloud_outlined,
+      'clear' => Icons.circle_outlined,
+      String() => null,
+    };
+  }
 
   Map<String, dynamic> _toMap() => {
         CityWeatherConstants.weather: weather.toJson(),
