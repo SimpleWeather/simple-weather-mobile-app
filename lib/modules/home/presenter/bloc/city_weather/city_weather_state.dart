@@ -21,6 +21,12 @@ class CityWeatherSuccessState extends CityWeatherState {
       ];
 }
 
+class SavedCityWeatherSuccessState extends CityWeatherState {
+  final CityWeatherFetch cities;
+
+  SavedCityWeatherSuccessState(this.cities);
+}
+
 class CityWeatherErrorState extends CityWeatherState {
   final String message;
 
