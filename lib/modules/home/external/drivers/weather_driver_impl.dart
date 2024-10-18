@@ -8,9 +8,15 @@ class WeatherDriverImpl implements WeatherDriver {
   Future<void> saveCity(CityWeather city) async {
     final prefs = await SharedPreferences.getInstance();
 
+    final savedCities = await getSavedCities() ?? CityWeatherFetch([]);
+
+    final updated = CityWeatherFetch(
+      [...savedCities.content, city],
+    );
+
     await prefs.setString(
       'savedCities',
-      city.toJson(),
+      updated.toJson(),
     );
   }
 

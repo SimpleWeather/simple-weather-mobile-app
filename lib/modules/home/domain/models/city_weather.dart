@@ -15,6 +15,14 @@ class CityWeatherFetch {
   factory CityWeatherFetch.fromJson(json) => CityWeatherFetch(
         (json as List).map(CityWeather.fromJson).toList(),
       );
+
+  List<Map<String, dynamic>> toMapList() => content
+      .map(
+        (city) => city._toMap(),
+      )
+      .toList();
+
+  String toJson() => jsonEncode(toMapList());
 }
 
 class CityWeather {
