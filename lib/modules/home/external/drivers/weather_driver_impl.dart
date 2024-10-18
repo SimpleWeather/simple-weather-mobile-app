@@ -5,28 +5,22 @@ import '../../infra/drivers/weather_driver.dart';
 
 class WeatherDriverImpl implements WeatherDriver {
   @override
-  Future<void> saveCity(CityWeather city) async {
+  Future<void> saveCities(CityWeatherFetch cities) async {
     final prefs = await SharedPreferences.getInstance();
-
-    final savedCities = await getSavedCities() ?? CityWeatherFetch([]);
-
-    final updated = CityWeatherFetch(
-      [...savedCities.content, city],
-    );
 
     await prefs.setString(
       'savedCities',
-      updated.toJson(),
+      cities.toJson(),
     );
   }
 
   @override
-  Future<CityWeatherFetch?> getSavedCities() async {
+  Future<CityWeatherFetch> getSavedCities() async {
     final prefs = await SharedPreferences.getInstance();
 
     final cities = prefs.getString('savedCities');
 
-    if (cities == null) return null;
+    if (cities == null) return CityWeatherFetch([]);
 
     return CityWeatherFetch.fromJson(cities);
   }

@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../../core/utils/filter_by_word_start.dart';
 import '../../../domain/models/city_weather.dart';
 import '../../../domain/models/weather.dart';
+import '../../../domain/usecases/get_saved_cities.dart';
 
 part 'city_weather_event.dart';
 part 'city_weather_state.dart';
@@ -66,7 +68,16 @@ class CityWeatherBloc extends Bloc<CityWeatherEvent, CityWeatherState> {
   ) async {
     emit(CityWeatherLoadingState());
 
-    emit(SavedCityWeatherSuccessState(savedCities));
+    emit(
+      (await Modular.get<GetSavedCities>()()).fold(
+        (exception) => CityWeatherErrorState(exception.toString()),
+        (cities) {
+          savedCities = cities;
+
+          SavedCityWeatherSuccessState(cities);
+        },
+      ),
+    );
   }
 
   void _searchCity(
