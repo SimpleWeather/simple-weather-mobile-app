@@ -14,8 +14,12 @@ class GetSavedCitiesImpl implements GetSavedCities {
 
   @override
   Future<Either<Exception, CityWeatherFetch>> call() async {
-    return Right(
-      await driver.getSavedCities(),
-    );
+    try {
+      return Right(
+        await driver.getSavedCities(),
+      );
+    } catch (e) {
+      return Left(Exception(e.toString()));
+    }
   }
 }

@@ -19,19 +19,23 @@ class SaveCityImpl implements SaveCity {
 
   @override
   Future<Either<Exception, void>> call(CityWeather city) async {
-    final savedCities = (await getSavedCities()).fold(
-      (_) => null,
-      (cities) => cities,
-    );
-
-    if (savedCities != null) {
-      final updated = CityWeatherFetch(
-        [...savedCities.content, city],
+    try {
+      final savedCities = (await getSavedCities()).fold(
+        (_) => null,
+        (cities) => cities,
       );
 
-      return Right(
-        await driver.saveCities(updated),
-      );
+      if (savedCities != null) {
+        final updated = CityWeatherFetch(
+          [...savedCities.content, city],
+        );
+
+        return Right(
+          await driver.saveCities(updated),
+        );
+      }
+    } catch (e) {
+      return Left(Exception(e.toString()));
     }
 
     return Left(Exception());
