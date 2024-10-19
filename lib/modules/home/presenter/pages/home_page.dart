@@ -15,7 +15,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final viewModel = Modular.get<HomeViewModel>()..fetchSavedCities();
+  final viewModel = Modular.get<HomeViewModel>();
+
+  @override
+  void initState() {
+    viewModel.fetchSavedCities();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,22 +46,27 @@ class _HomePageState extends State<HomePage> {
                     SearchCityWidget(
                       onSearch: viewModel.searchCity,
                     ),
-                    const SizedBox(height: 14),
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: cities.length,
-                        shrinkWrap: true,
-                        separatorBuilder: (_, __) => const SizedBox(height: 10),
-                        itemBuilder: (_, index) {
-                          final cityWeather = cities[index];
+                    if (cities.isEmpty)
+                      const SizedBox.shrink()
+                    else ...{
+                      const SizedBox(height: 14),
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: cities.length,
+                          shrinkWrap: true,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (_, index) {
+                            final cityWeather = cities[index];
 
-                          return CityWeatherWidget(
-                            cityWeather: cityWeather,
-                          );
-                        },
+                            return CityWeatherWidget(
+                              cityWeather: cityWeather,
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
+                      const SizedBox(height: 10),
+                    },
                   ],
                 );
               }

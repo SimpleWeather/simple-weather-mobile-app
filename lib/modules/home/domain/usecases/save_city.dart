@@ -21,7 +21,7 @@ class SaveCityImpl implements SaveCity {
   Future<Either<Exception, void>> call(CityWeather city) async {
     final savedCities = (await getSavedCities()).fold(
       (_) => null,
-      (cities) => cities ?? CityWeatherFetch([]),
+      (cities) => cities,
     );
 
     if (savedCities != null) {

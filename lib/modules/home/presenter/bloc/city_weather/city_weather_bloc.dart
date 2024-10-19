@@ -72,9 +72,9 @@ class CityWeatherBloc extends Bloc<CityWeatherEvent, CityWeatherState> {
       (await Modular.get<GetSavedCities>()()).fold(
         (exception) => CityWeatherErrorState(exception.toString()),
         (cities) {
-          savedCities = cities;
+          // savedCities = cities;
 
-          SavedCityWeatherSuccessState(cities);
+          return SavedCityWeatherSuccessState(savedCities);
         },
       ),
     );
