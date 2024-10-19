@@ -47,7 +47,19 @@ class _HomePageState extends State<HomePage> {
                       onSearch: viewModel.searchCity,
                     ),
                     if (cities.isEmpty)
-                      const SizedBox.shrink()
+                      const Center(
+                        heightFactor: 6,
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 28,
+                            ),
+                            Text(
+                                'Não foi possível encontrar a(s) cidade(s) bucada(s).'),
+                          ],
+                        ),
+                      )
                     else ...{
                       const SizedBox(height: 14),
                       Expanded(

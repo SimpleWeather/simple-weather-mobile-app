@@ -49,6 +49,8 @@ class _SearchCityWidgetState extends State<SearchCityWidget> {
                   suffixIcon: IconButton(
                     onPressed: () => setState(() {
                       viewModel.showSearch = false;
+                      viewModel.textController.clear();
+                      widget.onSearch(viewModel.textController.text);
                     }),
                     icon: const Icon(Icons.close),
                   ),

@@ -137,7 +137,7 @@ class CityWeatherBloc extends Bloc<CityWeatherEvent, CityWeatherState> {
 
     emit(
       SavedCityWeatherSuccessState(
-        savedCities,
+        event.cityQuery.isEmpty ? savedCities : found,
       ),
     );
   }
