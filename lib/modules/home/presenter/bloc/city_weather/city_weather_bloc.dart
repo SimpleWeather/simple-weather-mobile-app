@@ -53,6 +53,38 @@ class CityWeatherBloc extends Bloc<CityWeatherEvent, CityWeatherState> {
         ],
       ),
     ),
+    CityWeather(
+      city: 'Rio de Janeiro',
+      minTemperature: 23,
+      maxTemperature: 28,
+      feelsLike: 24,
+      humidity: .8,
+      temperature: 24,
+      weather: WeatherFetch(
+        [
+          Weather(
+            mainText: 'Chuva',
+            description: '',
+          ),
+        ],
+      ),
+    ),
+    CityWeather(
+      city: 'Petrolina',
+      minTemperature: 23,
+      maxTemperature: 28,
+      feelsLike: 24,
+      humidity: .8,
+      temperature: 24,
+      weather: WeatherFetch(
+        [
+          Weather(
+            mainText: 'Muito quente',
+            description: '',
+          ),
+        ],
+      ),
+    ),
   ]);
 
   Future<void> _fetchCityWeather(
