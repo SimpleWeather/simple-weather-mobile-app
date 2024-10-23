@@ -1,4 +1,4 @@
-part of 'city_weather_bloc.dart';
+part of '../../../../city_weather/presenter/bloc/city_weather/city_weather_bloc.dart';
 
 abstract class CityWeatherState extends Equatable {
   @override
@@ -19,12 +19,6 @@ class CityWeatherSuccessState extends CityWeatherState {
         cityWeather.city.trim().toLowerCase(),
         cityWeather.hashCode,
       ];
-}
-
-class SavedCityWeatherSuccessState extends CityWeatherState {
-  final CityWeatherFetch cities;
-
-  SavedCityWeatherSuccessState(this.cities);
 }
 
 class CityWeatherErrorState extends CityWeatherState {

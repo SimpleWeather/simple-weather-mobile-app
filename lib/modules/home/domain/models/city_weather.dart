@@ -23,6 +23,10 @@ class CityWeatherFetch {
       .toList();
 
   String toJson() => jsonEncode(toMapList());
+
+  bool containsCity(String city) => content.any(
+        (cityWeather) => cityWeather.city == city,
+      );
 }
 
 class CityWeather {

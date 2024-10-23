@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:simple_weather/modules/home/presenter/bloc/city_weather/city_weather_bloc.dart';
 
+import '../bloc/saved_city_weather/saved_city_weather_bloc.dart';
 import '../view_models/home_view_model.dart';
 import '../widgets/city_weather_widget.dart';
 import '../widgets/search_city_widget.dart';
@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    viewModel.fetchSavedCities();
+    viewModel.fetchUserCities();
 
     super.initState();
   }
@@ -34,11 +34,12 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
         ),
-        child: BlocBuilder(
+        child: BlocConsumer(
             bloc: viewModel.bloc,
+            listener: (_, state) {},
             builder: (context, state) {
               if (state is SavedCityWeatherSuccessState) {
-                final cities = state.cities.content;
+                final cities = state.cities.cities;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                               size: 28,
                             ),
                             Text(
-                                'Não foi possível encontrar a(s) cidade(s) bucada(s).'),
+                                'Não foi possível encontrar a(s) cidade(s) buscada(s).'),
                           ],
                         ),
                       )
@@ -69,10 +70,10 @@ class _HomePageState extends State<HomePage> {
                           separatorBuilder: (_, __) =>
                               const SizedBox(height: 10),
                           itemBuilder: (_, index) {
-                            final cityWeather = cities[index];
+                            final userCity = cities[index];
 
                             return CityWeatherWidget(
-                              cityWeather: cityWeather,
+                              userCity: userCity,
                             );
                           },
                         ),
