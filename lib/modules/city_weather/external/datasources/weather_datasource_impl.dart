@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:simple_weather/modules/home/domain/models/city_weather.dart';
 
@@ -26,6 +27,14 @@ class WeatherDatasourceImpl implements WeatherDatasource {
     ));
 
     if (response.statusCode != 200) return null;
+
+    if (kDebugMode) {
+      print(jsonDecode(
+        utf8.decode(
+          response.bodyBytes,
+        ),
+      ));
+    }
 
     return CityWeather.fromJson(
       jsonDecode(

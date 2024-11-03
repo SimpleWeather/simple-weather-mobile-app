@@ -14,11 +14,3 @@ class FetchCityWeatherEvent extends CityWeatherEvent {
     this.uf,
   });
 }
-
-class FetchSavedCitiesWeatherEvent extends CityWeatherEvent {}
-
-class SearchCityEvent extends CityWeatherEvent {
-  final String cityQuery;
-
-  SearchCityEvent(this.cityQuery);
-}

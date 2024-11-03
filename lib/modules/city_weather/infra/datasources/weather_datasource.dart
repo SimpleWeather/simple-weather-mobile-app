@@ -1,4 +1,4 @@
-import '../../domain/models/city_weather.dart';
+import '../../../home/domain/models/city_weather.dart';
 
 abstract class WeatherDatasource {
   Future<CityWeather?> getCityWeather(
