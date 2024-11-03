@@ -9,6 +9,8 @@ abstract class RegisterViewModel {
 
   abstract final RegisterUserBloc bloc;
 
+  bool get buttonEnabled;
+
   void register();
 
   void dispose();
@@ -31,6 +33,9 @@ class RegisterViewModelImpl implements RegisterViewModel {
           password: password.text,
         ),
       );
+
+  @override
+  bool get buttonEnabled => email.text.isNotEmpty && password.text.isNotEmpty;
 
   @override
   void dispose() {

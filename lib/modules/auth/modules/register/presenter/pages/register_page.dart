@@ -18,30 +18,90 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text(
+          'Cadastrar',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: BlocListener(
         bloc: viewModel.bloc,
         listener: (_, state) {
           if (state is RegisterUserSuccessState) {
-            Modular.to.pushNamed('../home');
+            Modular.to.pushReplacementNamed('../home/');
           }
         },
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: viewModel.email,
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: viewModel.password,
-            ),
-            const SizedBox(height: 80),
-            TextButton(
-              onPressed: () => viewModel.register(),
-              child: const Text('Cadastrar'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: viewModel.email,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'Ex: user@mailprovider.com',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: viewModel.password,
+                decoration: InputDecoration(
+                  labelText: 'Senha',
+                  hintText: 'Senha de usuário',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 80),
+              AnimatedBuilder(
+                  animation: Listenable.merge([
+                    viewModel.email,
+                    viewModel.password,
+                  ]),
+                  builder: (context, _) {
+                    return ElevatedButton(
+                      onPressed: () => viewModel.register(),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                          viewModel.buttonEnabled
+                              ? Colors.blueAccent
+                              : Colors.grey[300],
+                        ),
+                      ),
+                      child: Text(
+                        'Cadastrar',
+                        style: TextStyle(
+                          color: viewModel.buttonEnabled
+                              ? Colors.white
+                              : Colors.grey[600],
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  }),
+            ],
+          ),
         ),
       ),
     );

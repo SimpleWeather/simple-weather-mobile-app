@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../city_weather/presenter/bloc/city_weather/city_weather_bloc.dart';
 import '../bloc/saved_city_weather/saved_city_weather_bloc.dart';
@@ -40,7 +41,7 @@ class HomeViewModelImpl implements HomeViewModel {
 
   @override
   void fetchUserCities() {
-    String userId = '';
+    String userId = Supabase.instance.client.auth.currentUser!.id;
     bloc.add(FetchSavedCitiesWeatherEvent(userId));
   }
 

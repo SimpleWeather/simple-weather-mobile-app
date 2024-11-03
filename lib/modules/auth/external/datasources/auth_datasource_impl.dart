@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -16,10 +18,17 @@ class AuthDatasourceImpl implements AuthDatasource {
       password: password,
     );
 
-    if (response.user != null) {
+    final session = response.session;
+
+    if (session != null) {
+      (await SharedPreferences.getInstance()).setString(
+        'user_session',
+        jsonEncode(session.toJson()),
+      );
+
       (await SharedPreferences.getInstance()).setString(
         'userId',
-        response.user!.id,
+        session.user.id,
       );
     }
 

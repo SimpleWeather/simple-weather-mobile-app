@@ -38,6 +38,30 @@ class _HomePageState extends State<HomePage> {
             bloc: viewModel.bloc,
             listener: (_, state) {},
             builder: (context, state) {
+              if (state is SavedCityWeatherErrorState) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.red,
+                        child: Icon(
+                          Icons.info_outline,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              }
+
               if (state is SavedCityWeatherSuccessState) {
                 final cities = state.cities.cities;
 
