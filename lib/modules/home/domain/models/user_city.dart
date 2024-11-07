@@ -20,12 +20,14 @@ class UserCity {
   final String? uf;
   final String userId;
   final DateTime addedAt;
+  final int cityId;
 
   UserCity({
     required this.id,
     required this.city,
     required this.userId,
     required this.addedAt,
+    required this.cityId,
     this.uf,
   });
 
@@ -35,5 +37,6 @@ class UserCity {
         userId: map['userId'],
         uf: map['uf'],
         addedAt: DateTime.parse(map['addedAt']),
+        cityId: map['cityId'],
       );
 }

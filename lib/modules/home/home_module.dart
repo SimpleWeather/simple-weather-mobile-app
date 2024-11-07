@@ -1,13 +1,13 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart';
 
-import '../city_weather/city_weather_module.dart';
-import '../city_weather/domain/repositories/weather_repository.dart';
-import '../city_weather/domain/usecases/get_city_weather.dart';
-import '../city_weather/external/datasources/weather_datasource_impl.dart';
-import '../city_weather/infra/datasources/weather_datasource.dart';
-import '../city_weather/infra/repositories/weather_repository_impl.dart';
-import '../city_weather/presenter/bloc/city_weather/city_weather_bloc.dart';
+import '../city_feed/city_feed_module.dart';
+import '../city_feed/domain/repositories/city_feed_repository.dart';
+import '../city_feed/domain/usecases/get_city_weather.dart';
+import '../city_feed/external/datasources/city_feed_datasource_impl.dart';
+import '../city_feed/infra/datasources/city_feed_datasource.dart';
+import '../city_feed/infra/repositories/city_feed_repository_impl.dart';
+import '../city_feed/presenter/bloc/city_weather/city_feed_bloc.dart';
 import 'domain/repositories/user_cities_repository.dart';
 import 'domain/usecases/get_user_cities.dart';
 import 'external/datasources/user_cities_datasource_impl.dart';
@@ -16,6 +16,7 @@ import 'infra/datasources/user_cities_datasource.dart';
 import 'infra/drivers/weather_driver.dart';
 import 'infra/repository/user_cities_repository_impl.dart';
 import 'presenter/bloc/saved_city_weather/saved_city_weather_bloc.dart';
+import 'presenter/pages/add_city_to_feed_page.dart';
 import 'presenter/pages/home_page.dart';
 import 'presenter/view_models/home_view_model.dart';
 
@@ -46,17 +47,17 @@ class HomeModule extends Module {
     i.add<Client>(
       Client.new,
     );
-    i.add<WeatherDatasource>(
-      WeatherDatasourceImpl.new,
+    i.add<CityFeedDatasource>(
+      CityFeedDatasourceImpl.new,
     );
-    i.add<WeatherRepository>(
-      WeatherRepositoryImpl.new,
+    i.add<CityFeedRepository>(
+      CityFeedRepositoryImpl.new,
     );
     i.add<GetCityWeather>(
       GetCityWeatherImpl.new,
     );
-    i.add<CityWeatherBloc>(
-      CityWeatherBloc.new,
+    i.add<CityFeedBloc>(
+      CityFeedBloc.new,
     );
     super.binds(i);
   }
@@ -69,7 +70,13 @@ class HomeModule extends Module {
     );
     r.module(
       '/cityWeatherModule',
-      module: CityWeatherModule(),
+      module: CityFeedModule(),
+    );
+    r.child(
+      '/addCityToFeedPage',
+      child: (_) => AddCityToFeedPage(
+        city: r.args.data,
+      ),
     );
     super.routes(r);
   }

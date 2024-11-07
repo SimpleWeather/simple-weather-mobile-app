@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../city_feed/presenter/bloc/city_weather/city_feed_bloc.dart';
 import '../bloc/saved_city_weather/saved_city_weather_bloc.dart';
 import '../view_models/home_view_model.dart';
 import '../widgets/city_weather_widget.dart';
@@ -15,14 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final viewModel = Modular.get<HomeViewModel>();
-
-  @override
-  void initState() {
-    viewModel.fetchUserCities();
-
-    super.initState();
-  }
+  final viewModel = Modular.get<HomeViewModel>()..fetchUserCities();
 
   @override
   Widget build(BuildContext context) {
@@ -34,82 +28,111 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
         ),
-        child: BlocConsumer(
-            bloc: viewModel.bloc,
-            listener: (_, state) {},
-            builder: (context, state) {
-              if (state is SavedCityWeatherErrorState) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.red,
-                        child: Icon(
-                          Icons.info_outline,
-                          size: 60,
-                          color: Colors.white,
+        child: BlocListener(
+          bloc: viewModel.cityWeatherBloc,
+          listener: (_, state) {
+            if (state is CityWeatherSuccessState) {
+              Modular.to.pushNamed(
+                '/addCityToFeedPage/',
+                arguments: state.cityWeather,
+              );
+            }
+          },
+          child: BlocBuilder(
+              bloc: viewModel.bloc,
+              builder: (context, state) {
+                if (state is SavedCityWeatherErrorState) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.red,
+                          child: Icon(
+                            Icons.info_outline,
+                            size: 60,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        state.message,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              if (state is SavedCityWeatherSuccessState) {
-                final cities = state.cities.cities;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SearchCityWidget(
-                      onSearch: viewModel.searchCity,
+                        const SizedBox(height: 16),
+                        Text(
+                          state.message,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                    if (cities.isEmpty)
-                      const Center(
-                        heightFactor: 6,
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.search_off,
-                              size: 28,
+                  );
+                }
+
+                if (state is SavedCityWeatherSuccessState) {
+                  final cities = state.cities.cities;
+
+                  return SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SearchCityWidget(
+                          onSearch: viewModel.searchCity,
+                          showSearch: viewModel.showSearch,
+                          controller: viewModel.textController,
+                          onTap: () => setState(() {
+                            viewModel.showSearch = true;
+                          }),
+                          onCloseTap: () => setState(() {
+                            viewModel.showSearch = false;
+                            viewModel.textController.clear();
+                            viewModel.searchCity(viewModel.textController.text);
+                          }),
+                        ),
+                        if (cities.isEmpty)
+                          Center(
+                            heightFactor: 4,
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  Icons.search_off,
+                                  size: 28,
+                                ),
+                                const Text(
+                                    'Não foi possível encontrar a(s) cidade(s) buscada(s).'),
+                                if (viewModel
+                                    .textController.text.isNotEmpty) ...{
+                                  TextButton(
+                                    onPressed: () => viewModel.searchNewCity(),
+                                    child: const Text('Busca avançada'),
+                                  ),
+                                },
+                              ],
                             ),
-                            Text(
-                                'Não foi possível encontrar a(s) cidade(s) buscada(s).'),
-                          ],
-                        ),
-                      )
-                    else ...{
-                      const SizedBox(height: 14),
-                      Expanded(
-                        child: ListView.separated(
-                          itemCount: cities.length,
-                          shrinkWrap: true,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: 10),
-                          itemBuilder: (_, index) {
-                            final userCity = cities[index];
+                          )
+                        else ...{
+                          const SizedBox(height: 14),
+                          Expanded(
+                            child: ListView.separated(
+                              itemCount: cities.length,
+                              shrinkWrap: true,
+                              separatorBuilder: (_, __) =>
+                                  const SizedBox(height: 10),
+                              itemBuilder: (_, index) {
+                                final userCity = cities[index];
 
-                            return CityWeatherWidget(
-                              userCity: userCity,
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    },
-                  ],
-                );
-              }
+                                return CityWeatherWidget(
+                                  userCity: userCity,
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                        },
+                      ],
+                    ),
+                  );
+                }
 
-              return const SizedBox.shrink();
-            }),
+                return const SizedBox.shrink();
+              }),
+        ),
       ),
     );
   }

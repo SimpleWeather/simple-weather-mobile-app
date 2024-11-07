@@ -8,7 +8,8 @@ class UserCitiesDatasourceImpl implements UserCitiesDatasource {
   Future<UserCityFetch> getUserCities(String userId) async {
     final client = Supabase.instance.client;
 
-    final response = await client.from('cities').select().eq('userId', userId);
+    final response =
+        await client.from('user_cities').select().eq('userId', userId);
 
     if (response.isEmpty) {
       return UserCityFetch([]);

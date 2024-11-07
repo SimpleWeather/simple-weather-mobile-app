@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../city_weather/presenter/bloc/city_weather/city_weather_bloc.dart';
+import '../../../city_feed/presenter/bloc/city_weather/city_feed_bloc.dart';
 import '../bloc/saved_city_weather/saved_city_weather_bloc.dart';
 
 abstract class HomeViewModel {
   abstract final SavedCityWeatherBloc bloc;
 
-  abstract final CityWeatherBloc cityWeatherBloc;
+  abstract final CityFeedBloc cityWeatherBloc;
 
   abstract bool showSearch;
 
@@ -28,7 +28,7 @@ class HomeViewModelImpl implements HomeViewModel {
   final bloc = Modular.get<SavedCityWeatherBloc>();
 
   @override
-  final cityWeatherBloc = Modular.get<CityWeatherBloc>();
+  final cityWeatherBloc = Modular.get<CityFeedBloc>();
 
   @override
   final textController = TextEditingController();

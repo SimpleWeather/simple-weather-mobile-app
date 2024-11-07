@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../home/domain/models/city_weather.dart';
-import '../repositories/weather_repository.dart';
+import '../repositories/city_feed_repository.dart';
 
 abstract class GetCityWeather {
   Future<Either<Exception, CityWeather>> call(
@@ -11,7 +11,7 @@ abstract class GetCityWeather {
 }
 
 class GetCityWeatherImpl implements GetCityWeather {
-  final WeatherRepository repository;
+  final CityFeedRepository repository;
 
   GetCityWeatherImpl(this.repository);
 

@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-
-import '../view_models/home_view_model.dart';
 
 class SearchCityWidget extends StatefulWidget {
   final Function(String) onSearch;
+  final VoidCallback onTap;
+  final VoidCallback onCloseTap;
+  final bool showSearch;
+  final TextEditingController controller;
   const SearchCityWidget({
     super.key,
     required this.onSearch,
+    required this.onTap,
+    required this.showSearch,
+    required this.controller,
+    required this.onCloseTap,
   });
 
   @override
@@ -15,17 +20,13 @@ class SearchCityWidget extends StatefulWidget {
 }
 
 class _SearchCityWidgetState extends State<SearchCityWidget> {
-  final viewModel = Modular.get<HomeViewModel>();
-
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: !viewModel.showSearch
+      child: !widget.showSearch
           ? IconButton(
-              onPressed: () => setState(() {
-                viewModel.showSearch = true;
-              }),
+              onPressed: widget.onTap,
               icon: const Row(
                 children: [
                   Icon(Icons.search),
@@ -38,7 +39,7 @@ class _SearchCityWidgetState extends State<SearchCityWidget> {
                 vertical: 8,
               ),
               child: TextFormField(
-                controller: viewModel.textController,
+                controller: widget.controller,
                 onTapOutside: (_) => FocusScope.of(context).unfocus(),
                 onChanged: widget.onSearch,
                 decoration: InputDecoration(
@@ -47,11 +48,7 @@ class _SearchCityWidgetState extends State<SearchCityWidget> {
                     Icons.search,
                   ),
                   suffixIcon: IconButton(
-                    onPressed: () => setState(() {
-                      viewModel.showSearch = false;
-                      viewModel.textController.clear();
-                      widget.onSearch(viewModel.textController.text);
-                    }),
+                    onPressed: widget.onCloseTap,
                     icon: const Icon(Icons.close),
                   ),
                   border: OutlineInputBorder(
