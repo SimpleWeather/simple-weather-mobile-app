@@ -17,4 +17,14 @@ class AuthRepositoryImpl implements AuthRepository {
         email: email,
         password: password,
       );
+
+  @override
+  Future<AuthResponse> loginUser({
+    required String email,
+    required String password,
+  }) async =>
+      datasource.loginUser(
+        email: email,
+        password: password,
+      );
 }

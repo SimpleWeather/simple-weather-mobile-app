@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../../presenter/view_models/auth_view_model.dart';
 import '../bloc/register_user/register_user_bloc.dart';
 
-abstract class RegisterViewModel {
-  abstract final TextEditingController email;
-  abstract final TextEditingController password;
-
-  abstract final RegisterUserBloc bloc;
-
-  bool get buttonEnabled;
-
-  void register();
-
-  void dispose();
-}
-
-class RegisterViewModelImpl implements RegisterViewModel {
-  @override
+class RegisterViewModelImpl implements AuthViewModel {
   final bloc = Modular.get<RegisterUserBloc>();
 
   @override
@@ -27,15 +14,7 @@ class RegisterViewModelImpl implements RegisterViewModel {
   final password = TextEditingController();
 
   @override
-  void register() => bloc.add(
-        RegisterNewUserEvent(
-          email: email.text,
-          password: password.text,
-        ),
-      );
-
-  @override
-  bool get buttonEnabled => email.text.isNotEmpty && password.text.isNotEmpty;
+  bool get buttonIsEnabled => email.text.isNotEmpty && password.text.isNotEmpty;
 
   @override
   void dispose() {

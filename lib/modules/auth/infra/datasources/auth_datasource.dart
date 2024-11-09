@@ -5,4 +5,9 @@ abstract class AuthDatasource {
     required String email,
     required String password,
   });
+
+  Future<AuthResponse> loginUser({
+    required String email,
+    required String password,
+  });
 }

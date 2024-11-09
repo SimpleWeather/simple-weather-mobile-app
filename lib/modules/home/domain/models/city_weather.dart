@@ -30,6 +30,7 @@ class CityWeatherFetch {
 }
 
 class CityWeather {
+  final int id;
   final WeatherFetch weather;
   final double temperature;
   final double feelsLike;
@@ -39,6 +40,7 @@ class CityWeather {
   final String city;
 
   CityWeather({
+    required this.id,
     required this.weather,
     required this.temperature,
     required this.feelsLike,
@@ -78,21 +80,51 @@ class CityWeather {
         },
       };
 
+  Map<String, dynamic> toCityMap() => {
+        'id': id,
+        'name': city,
+        'temperature': temperature,
+        'feelsLike': feelsLike,
+        'maxTemperature': maxTemperature,
+        'minTemperature': minTemperature,
+        'humidity': humidity,
+        'mainWeather': weather.content.first.mainText,
+        'weatherDescription': weather.content.first.description,
+      };
+
+  Map<String, dynamic> toUserCityFeedMap({
+    required DateTime addedAt,
+    required String userId,
+    String? uf,
+  }) =>
+      {
+        'cityId': id,
+        'city': city,
+        'addedAt': addedAt.toIso8601String(),
+        'userId': userId,
+        'uf': uf,
+      };
+
   String toJson() => jsonEncode(_toMap());
 
   factory CityWeather.fromJson(json) {
     final main = json[CityWeatherConstants.main];
 
     return CityWeather(
+      id: json[CityWeatherConstants.id],
       weather: WeatherFetch.fromJson(
         json[CityWeatherConstants.weather],
       ),
       temperature: main[CityWeatherConstants.temp],
       feelsLike: main[CityWeatherConstants.feelsLike],
-      maxTemperature: _convert(main[CityWeatherConstants.maxTemperature]),
-      minTemperature: _convert(main[CityWeatherConstants.minTemperature]),
-      humidity: main[CityWeatherConstants.humidity],
-      city: json[CityWeatherConstants.city],
+      maxTemperature: _convert(
+        main[CityWeatherConstants.maxTemperature].toString(),
+      ),
+      minTemperature: _convert(
+        main[CityWeatherConstants.minTemperature].toString(),
+      ),
+      humidity: (main[CityWeatherConstants.humidity] as int).toDouble(),
+      city: json[CityWeatherConstants.name],
     );
   }
 }
