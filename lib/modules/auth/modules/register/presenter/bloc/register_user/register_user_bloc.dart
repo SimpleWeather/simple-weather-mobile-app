@@ -1,23 +1,24 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../../presenter/bloc/auth_bloc.dart';
+import '../../../../../presenter/bloc/auth_event.dart';
+import '../../../../../presenter/bloc/auth_state.dart';
 import '../../../domain/usecases/register_user.dart';
 
 part 'register_user_event.dart';
 part 'register_user_state.dart';
 
-class RegisterUserBloc extends Bloc<RegisterUserEvent, RegisterUserState> {
-  RegisterUserBloc() : super(RegisterUserInitialState()) {
-    on<RegisterNewUserEvent>(_registerUser);
+class RegisterUserBloc extends AuthBloc {
+  RegisterUserBloc() : super(AuthInitialState()) {
+    on<AuthSessionEvent>(
+      _registerUser,
+    );
   }
 
-  Future<void> _registerUser(
-    RegisterNewUserEvent event,
-    emit,
-  ) async {
-    emit(RegisterUserLoadingState());
+  Future<void> _registerUser(AuthSessionEvent event, emit) async {
+    emit(AuthLoadingState());
 
     emit(
       (await Modular.get<RegisterUser>().call(
@@ -25,10 +26,10 @@ class RegisterUserBloc extends Bloc<RegisterUserEvent, RegisterUserState> {
         password: event.password,
       ))
           .fold(
-        (exception) => RegisterUserErrorState(
+        (exception) => AuthErrorState(
           exception.toString(),
         ),
-        RegisterUserSuccessState.new,
+        AuthSuccessState.new,
       ),
     );
   }

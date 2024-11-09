@@ -4,9 +4,9 @@ import '../../domain/repositories/auth_repository.dart';
 import '../../external/datasources/auth_datasource_impl.dart';
 import '../../infra/datasources/auth_datasource.dart';
 import '../../infra/repositories/auth_repository_impl.dart';
+import '../../presenter/auth_page.dart';
 import 'domain/usecases/register_user.dart';
 import 'presenter/bloc/register_user/register_user_bloc.dart';
-import 'presenter/pages/register_page.dart';
 import 'presenter/view_models/register_view_model.dart';
 
 class RegisterModule extends Module {
@@ -28,7 +28,7 @@ class RegisterModule extends Module {
       RegisterUserImpl.new,
     );
 
-    i.add<RegisterViewModel>(
+    i.add<RegisterViewModelImpl>(
       RegisterViewModelImpl.new,
     );
     super.binds(i);
@@ -38,7 +38,11 @@ class RegisterModule extends Module {
   void routes(RouteManager r) {
     r.child(
       '/',
-      child: (_) => const RegisterPage(),
+      child: (_) => const AuthPage<RegisterViewModelImpl, RegisterUserBloc>(
+        pageTitle: 'Registrar',
+        mainButtonText: 'Registrar',
+        successNavigationRoute: '../home/',
+      ),
     );
     super.routes(r);
   }

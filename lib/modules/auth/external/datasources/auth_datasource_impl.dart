@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../infra/datasources/auth_datasource.dart';
@@ -18,19 +15,20 @@ class AuthDatasourceImpl implements AuthDatasource {
       password: password,
     );
 
-    final session = response.session;
+    return response;
+  }
 
-    if (session != null) {
-      (await SharedPreferences.getInstance()).setString(
-        'user_session',
-        jsonEncode(session.toJson()),
-      );
+  @override
+  Future<AuthResponse> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    final client = Supabase.instance.client.auth;
 
-      (await SharedPreferences.getInstance()).setString(
-        'userId',
-        session.user.id,
-      );
-    }
+    final response = await client.signInWithPassword(
+      email: email,
+      password: password,
+    );
 
     return response;
   }

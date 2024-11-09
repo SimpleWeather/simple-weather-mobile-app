@@ -9,12 +9,12 @@ class AuthModule extends Module {
   void routes(RouteManager r) {
     r.module(
       '/',
-      module: RegisterModule(),
+      module: LoginModule(),
     );
 
     r.module(
-      '/login',
-      module: LoginModule(),
+      '/register',
+      module: RegisterModule(),
     );
 
     r.module(

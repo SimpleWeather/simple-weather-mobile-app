@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 enum AuthRequired {
@@ -22,20 +19,23 @@ class SessionViewModelImpl implements SessionViewModel {
 
   @override
   Future<void> verifyUserSession() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final session = Session.fromJson(
-      jsonDecode(prefs.getString('user_session') ?? ''),
-    );
+    final auth = Supabase.instance.client.auth;
+    final session = auth.currentSession;
 
     if (session != null) {
       if (!session.isExpired) {
         logged.value = AuthRequired.logged;
+
+        if (kDebugMode) {
+          print('Entrou como ${session.user.email} - ${session.user.id}');
+          print(
+              'Sessão expira em ${((session.expiresIn ?? 0) / 60).round()} minutos');
+        }
+
         return;
       }
     }
 
-    (await SharedPreferences.getInstance()).setString('user_session', '');
     logged.value = AuthRequired.requiredSignIn;
   }
 }

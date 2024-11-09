@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../city_feed/presenter/bloc/city_weather/city_feed_bloc.dart';
-import '../../domain/models/city_weather.dart';
 
 class AddCityToFeedPage extends StatefulWidget {
-  final CityWeather city;
+  final String searchedCity;
 
   const AddCityToFeedPage({
     super.key,
-    required this.city,
+    required this.searchedCity,
   });
 
   @override
@@ -18,7 +17,12 @@ class AddCityToFeedPage extends StatefulWidget {
 }
 
 class _AddCityToFeedPageState extends State<AddCityToFeedPage> {
-  final bloc = Modular.get<CityFeedBloc>();
+  late final bloc = Modular.get<CityFeedBloc>()
+    ..add(
+      FetchCityWeatherEvent(
+        cityName: widget.searchedCity,
+      ),
+    );
 
   @override
   Widget build(BuildContext context) {
@@ -31,20 +35,45 @@ class _AddCityToFeedPageState extends State<AddCityToFeedPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.city.city),
+          title: Text(widget.searchedCity),
           actions: [
-            IconButton(
-              onPressed: () => bloc.add(
-                AddCityToFeedEvent(
-                  widget.city,
-                ),
-              ),
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-            ),
+            BlocBuilder(
+                bloc: bloc,
+                builder: (_, state) {
+                  if (state is CityWeatherSuccessState) {
+                    return IconButton(
+                      onPressed: () => bloc.add(
+                        AddCityToFeedEvent(
+                          state.cityWeather,
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                }),
           ],
+        ),
+        body: BlocBuilder(
+          bloc: bloc,
+          builder: (_, state) {
+            if (state is CityWeatherSuccessState) {
+              final cityWeather = state.cityWeather;
+
+              return Column(
+                children: [
+                  Text(cityWeather.id.toString()),
+                  Text('Feels like: ${cityWeather.feelsLike}'),
+                ],
+              );
+            }
+
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );

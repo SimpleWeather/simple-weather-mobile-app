@@ -1,13 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:http/http.dart';
 
 import '../city_feed/city_feed_module.dart';
-import '../city_feed/domain/repositories/city_feed_repository.dart';
-import '../city_feed/domain/usecases/get_city_weather.dart';
-import '../city_feed/external/datasources/city_feed_datasource_impl.dart';
-import '../city_feed/infra/datasources/city_feed_datasource.dart';
-import '../city_feed/infra/repositories/city_feed_repository_impl.dart';
-import '../city_feed/presenter/bloc/city_weather/city_feed_bloc.dart';
 import 'domain/repositories/user_cities_repository.dart';
 import 'domain/usecases/get_user_cities.dart';
 import 'external/datasources/user_cities_datasource_impl.dart';
@@ -43,22 +36,6 @@ class HomeModule extends Module {
       GetUserCitiesImpl.new,
     );
 
-    // CityWeatherModule
-    i.add<Client>(
-      Client.new,
-    );
-    i.add<CityFeedDatasource>(
-      CityFeedDatasourceImpl.new,
-    );
-    i.add<CityFeedRepository>(
-      CityFeedRepositoryImpl.new,
-    );
-    i.add<GetCityWeather>(
-      GetCityWeatherImpl.new,
-    );
-    i.add<CityFeedBloc>(
-      CityFeedBloc.new,
-    );
     super.binds(i);
   }
 
@@ -75,7 +52,7 @@ class HomeModule extends Module {
     r.child(
       '/addCityToFeedPage',
       child: (_) => AddCityToFeedPage(
-        city: r.args.data,
+        searchedCity: r.args.data,
       ),
     );
     super.routes(r);
