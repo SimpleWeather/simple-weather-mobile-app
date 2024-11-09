@@ -26,7 +26,7 @@ class _AddCityToFeedPageState extends State<AddCityToFeedPage> {
       bloc: bloc,
       listener: (_, state) {
         if (state is CityFeedSuccessState) {
-          Navigator.pop(context);
+          Navigator.pop(context, true);
         }
       },
       child: Scaffold(

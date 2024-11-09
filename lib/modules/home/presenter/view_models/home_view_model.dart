@@ -20,7 +20,9 @@ abstract class HomeViewModel {
 
   void searchCity(String query);
 
-  void searchNewCity();
+  void fetchNewCity();
+
+  void closeSearch();
 }
 
 class HomeViewModelImpl implements HomeViewModel {
@@ -51,11 +53,18 @@ class HomeViewModelImpl implements HomeViewModel {
   }
 
   @override
-  void searchNewCity() {
+  void fetchNewCity() {
     cityWeatherBloc.add(
       FetchCityWeatherEvent(
         cityName: (bloc.query),
       ),
     );
+  }
+
+  @override
+  void closeSearch() {
+    showSearch = false;
+    textController.clear();
+    searchCity(textController.text);
   }
 }

@@ -32,10 +32,16 @@ class _HomePageState extends State<HomePage> {
           bloc: viewModel.cityWeatherBloc,
           listener: (_, state) {
             if (state is CityWeatherSuccessState) {
-              Modular.to.pushNamed(
+              Modular.to
+                  .pushNamed(
                 '/addCityToFeedPage/',
                 arguments: state.cityWeather,
-              );
+              )
+                  .then((result) {
+                if (result != null) {
+                  viewModel.fetchUserCities();
+                }
+              });
             }
           },
           child: BlocBuilder(
@@ -79,11 +85,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () => setState(() {
                             viewModel.showSearch = true;
                           }),
-                          onCloseTap: () => setState(() {
-                            viewModel.showSearch = false;
-                            viewModel.textController.clear();
-                            viewModel.searchCity(viewModel.textController.text);
-                          }),
+                          onCloseTap: () => setState(viewModel.closeSearch),
                         ),
                         if (cities.isEmpty)
                           Center(
@@ -96,13 +98,11 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 const Text(
                                     'Não foi possível encontrar a(s) cidade(s) buscada(s).'),
-                                if (viewModel
-                                    .textController.text.isNotEmpty) ...{
+                                if (viewModel.textController.text.isNotEmpty)
                                   TextButton(
-                                    onPressed: () => viewModel.searchNewCity(),
+                                    onPressed: () => viewModel.fetchNewCity(),
                                     child: const Text('Busca avançada'),
                                   ),
-                                },
                               ],
                             ),
                           )
@@ -114,13 +114,9 @@ class _HomePageState extends State<HomePage> {
                               shrinkWrap: true,
                               separatorBuilder: (_, __) =>
                                   const SizedBox(height: 10),
-                              itemBuilder: (_, index) {
-                                final userCity = cities[index];
-
-                                return CityWeatherWidget(
-                                  userCity: userCity,
-                                );
-                              },
+                              itemBuilder: (_, index) => CityWeatherWidget(
+                                userCity: cities[index],
+                              ),
                             ),
                           ),
                           const SizedBox(height: 10),
