@@ -11,6 +11,8 @@ abstract class SessionViewModel {
   abstract final ValueNotifier<AuthRequired> logged;
 
   Future<void> verifyUserSession();
+
+  void dispose();
 }
 
 class SessionViewModelImpl implements SessionViewModel {
@@ -19,23 +21,26 @@ class SessionViewModelImpl implements SessionViewModel {
 
   @override
   Future<void> verifyUserSession() async {
-    final auth = Supabase.instance.client.auth;
-    final session = auth.currentSession;
+    final session = Supabase.instance.client.auth.currentSession;
 
-    if (session != null) {
-      if (!session.isExpired) {
-        logged.value = AuthRequired.logged;
-
-        if (kDebugMode) {
-          print('Entrou como ${session.user.email} - ${session.user.id}');
-          print(
-              'Sessão expira em ${((session.expiresIn ?? 0) / 60).round()} minutos');
-        }
-
-        return;
-      }
+    if (session == null) {
+      logged.value = AuthRequired.requiredSignIn;
+      return;
     }
 
-    logged.value = AuthRequired.requiredSignIn;
+    if (!session.isExpired) {
+      logged.value = AuthRequired.logged;
+
+      if (kDebugMode) {
+        print('Entrou como ${session.user.email} - ${session.user.id}');
+        print(
+            'Sessão expira em ${((session.expiresIn ?? 0) / 60).round()} minutos');
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    logged.dispose();
   }
 }

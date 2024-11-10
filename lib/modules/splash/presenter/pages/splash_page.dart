@@ -34,18 +34,20 @@ class _SplashPageState extends State<SplashPage> {
               Modular.to.pushReplacementNamed('../auth/');
             }
 
-            if (value == AuthRequired.none) {
-              return Column(
-                children: [
-                  Center(
-                    child: Image.asset('assets/splash.png'),
-                  ),
-                ],
-              );
-            }
-
-            return const SizedBox.shrink();
+            return Column(
+              children: [
+                Center(
+                  child: Image.asset('assets/splash.png'),
+                ),
+              ],
+            );
           }),
     );
+  }
+
+  @override
+  void dispose() {
+    sessionViewModel.dispose();
+    super.dispose();
   }
 }
