@@ -20,14 +20,22 @@ final class FetchCityWeatherEvent extends CityFeedEvent {
       ];
 }
 
-final class FetchCityFeedInteractionsEvent extends CityFeedEvent {
+final class FetchCityFeedInfoEvent extends CityFeedEvent {
   final int cityId;
+  final String cityName;
+  final String? uf;
 
-  FetchCityFeedInteractionsEvent(this.cityId);
+  FetchCityFeedInfoEvent({
+    required this.cityId,
+    required this.cityName,
+    this.uf,
+  });
 
   @override
   List<Object?> get props => [
         cityId,
+        cityName,
+        uf,
       ];
 }
 
@@ -39,5 +47,21 @@ final class AddCityToFeedEvent extends CityFeedEvent {
   @override
   List<Object?> get props => [
         city,
+      ];
+}
+
+final class AddCityFeedInteraction extends CityFeedEvent {
+  final int cityId;
+  final String content;
+
+  AddCityFeedInteraction({
+    required this.cityId,
+    required this.content,
+  });
+
+  @override
+  List<Object?> get props => [
+        cityId,
+        content,
       ];
 }

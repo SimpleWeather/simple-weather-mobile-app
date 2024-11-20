@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:simple_weather/modules/city_feed/domain/models/city_feed_interaction.dart';
+import 'package:simple_weather/modules/city_feed/domain/models/new_city_feed_interaction.dart';
 import 'package:simple_weather/modules/home/domain/models/city_weather.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -85,5 +86,30 @@ class CityFeedDatasourceImpl implements CityFeedDatasource {
     await supabaseClient.from('user_cities').insert(
           userCity,
         );
+  }
+
+  @override
+  Future<CityFeedInteraction?> createCityFeedInteraction(
+    NewCityFeedInteraction interaction,
+  ) async {
+    final supabaseClient = Supabase.instance.client;
+
+    final user = supabaseClient.auth.currentUser!;
+
+    final response = await supabaseClient
+        .from('city_feed_interaction')
+        .insert(
+          interaction.toMap(
+            creatorId: user.id,
+            creatorName: user.email!.split('@').first,
+          ),
+        )
+        .select();
+
+    if (response.isEmpty) return null;
+
+    return CityFeedInteraction.fromMap(
+      response.first,
+    );
   }
 }

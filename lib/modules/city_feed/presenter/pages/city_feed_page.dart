@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../../../home/domain/models/user_city.dart';
 import '../bloc/city_weather/city_feed_bloc.dart';
 import '../widgets/city_feed_interaction_card_widget.dart';
+import 'create_city_interaction_bottom_sheet.dart';
 
 class CityFeedPage extends StatefulWidget {
   final UserCity userCity;
@@ -21,15 +22,11 @@ class CityFeedPage extends StatefulWidget {
 class _CityFeedPageState extends State<CityFeedPage> {
   late final bloc = Modular.get<CityFeedBloc>()
     ..add(
-      FetchCityFeedInteractionsEvent(
-        widget.userCity.cityId,
+      FetchCityFeedInfoEvent(
+        cityId: widget.userCity.cityId,
+        cityName: widget.userCity.city,
       ),
     );
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,24 +37,54 @@ class _CityFeedPageState extends State<CityFeedPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async => await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.white,
+          builder: (_) => CreateCityInteractionBottomSheet(
+            cityId: widget.userCity.cityId,
+            onConfirmTap: (content) => bloc.add(
+              AddCityFeedInteraction(
+                cityId: widget.userCity.cityId,
+                content: content,
+              ),
+            ),
+          ),
+        ),
         backgroundColor: Colors.blueAccent,
         child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
-      body: Column(
-        children: [
-          BlocBuilder(
-            bloc: bloc,
-            builder: (_, state) {
-              if (state is CityFeedSuccessState) {
-                final feedInteractions =
-                    state.cityFeedInteractions.feedInteractions;
+      body: BlocBuilder(
+        bloc: bloc,
+        builder: (_, state) {
+          if (state is CityFeedInfoSuccessState) {
+            final feedInteractions =
+                state.cityFeedInteractions.feedInteractions;
+            final cityWeather = state.cityWeather;
 
-                if (feedInteractions.isEmpty) {
-                  return const Center(
+            return Column(
+              children: [
+                if (cityWeather != null) ...{
+                  Text(
+                    '${cityWeather.maxTemperature.toStringAsPrecision(2)} °C',
+                    style: const TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    '${cityWeather.minTemperature.toStringAsPrecision(2)} °C',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                },
+                if (feedInteractions.isEmpty)
+                  const Center(
                     heightFactor: 7,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -67,22 +94,28 @@ class _CityFeedPageState extends State<CityFeedPage> {
                         Text('Não há interações ainda no feed desta cidade!'),
                       ],
                     ),
-                  );
-                }
+                  )
+                else ...{
+                  const SizedBox(height: 20),
+                  ListView.builder(
+                    itemCount: feedInteractions.length,
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      final interaction = feedInteractions[index];
 
-                return ListView.builder(
-                  itemCount: feedInteractions.length,
-                  shrinkWrap: true,
-                  itemBuilder: (_, index) => CityFeedInteractionCardWidget(
-                    interaction: feedInteractions[index],
+                      return CityFeedInteractionCardWidget(
+                        interaction: interaction,
+                        onTrailingTap: () {},
+                      );
+                    },
                   ),
-                );
-              }
+                },
+              ],
+            );
+          }
 
-              return const SizedBox.shrink();
-            },
-          ),
-        ],
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
