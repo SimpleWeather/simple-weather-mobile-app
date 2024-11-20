@@ -1,3 +1,5 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 class CityFeedInteractionFetch {
   List<CityFeedInteraction> feedInteractions = [];
 
@@ -37,7 +39,13 @@ class CityFeedInteraction {
   });
 
   String get createdAtNormalized =>
-      '${createdAt.day.toString().padLeft(2, '0')}/${createdAt.month.toString().padLeft(2, '0')}/${createdAt.year}';
+      '${createdAt.day.toString().padLeft(2, '0')}/${createdAt.month.toString().padLeft(2, '0')}/${createdAt.year} às ${createdAt.hour.toString().padLeft(2, '0')}h${createdAt.minute.toString().padLeft(
+            2,
+            '0',
+          )}';
+
+  bool get interactionIsFromCurrentUser =>
+      Supabase.instance.client.auth.currentUser?.id == creatorId;
 
   factory CityFeedInteraction.fromMap(dynamic map) => CityFeedInteraction(
         id: map['id'],

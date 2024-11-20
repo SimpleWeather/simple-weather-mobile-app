@@ -15,4 +15,8 @@ abstract class CityFeedDatasource {
   Future<CityFeedInteraction?> createCityFeedInteraction(
     NewCityFeedInteraction interaction,
   );
+
+  Future<void> deleteCityFeedInteraction(
+    String interactionId,
+  );
 }

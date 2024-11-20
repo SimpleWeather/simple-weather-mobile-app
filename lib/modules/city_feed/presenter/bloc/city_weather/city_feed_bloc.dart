@@ -6,6 +6,7 @@ import '../../../../home/domain/models/city_weather.dart';
 import '../../../domain/models/city_feed_interaction.dart';
 import '../../../domain/models/new_city_feed_interaction.dart';
 import '../../../domain/usecases/create_city_feed_interaction.dart';
+import '../../../domain/usecases/delete_city_feed_interaction.dart' as delete;
 import '../../../domain/usecases/get_city_feed_interactions.dart';
 import '../../../domain/usecases/get_city_weather.dart';
 import '../../../domain/usecases/save_city_to_feed.dart';
@@ -32,6 +33,10 @@ class CityFeedBloc extends Bloc<CityFeedEvent, CityFeedState> {
 
     on<AddCityFeedInteraction>(
       _addCityFeedInteraction,
+    );
+
+    on<DeleteCityFeedInteraction>(
+      _deleteCityFeedInteraction,
     );
   }
 
@@ -132,6 +137,39 @@ class CityFeedBloc extends Bloc<CityFeedEvent, CityFeedState> {
               if (createdInteraction != null) createdInteraction,
               ..._interactions!.feedInteractions,
             ],
+          );
+
+          return CityFeedInfoSuccessState(
+            cityFeedInteractions: _interactions!,
+            cityWeather: _cityWeather,
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _deleteCityFeedInteraction(
+    DeleteCityFeedInteraction event,
+    emit,
+  ) async {
+    if (_interactions == null) return;
+
+    emit(CityFeedLoadingState());
+
+    emit(
+      (await Modular.get<delete.DeleteCityFeedInteraction>().call(
+        event.interactionId,
+      ))
+          .fold(
+        (exception) => CityFeedErrorState(
+          exception.toString(),
+        ),
+        (_) {
+          _interactions = CityFeedInteractionFetch(
+            _interactions!.feedInteractions
+              ..removeWhere(
+                (interaction) => interaction.id == event.interactionId,
+              ),
           );
 
           return CityFeedInfoSuccessState(

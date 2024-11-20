@@ -65,3 +65,14 @@ final class AddCityFeedInteraction extends CityFeedEvent {
         content,
       ];
 }
+
+final class DeleteCityFeedInteraction extends CityFeedEvent {
+  final String interactionId;
+
+  DeleteCityFeedInteraction(this.interactionId);
+
+  @override
+  List<Object?> get props => [
+        interactionId,
+      ];
+}

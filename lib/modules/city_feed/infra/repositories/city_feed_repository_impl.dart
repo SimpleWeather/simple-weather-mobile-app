@@ -39,8 +39,16 @@ class CityFeedRepositoryImpl implements CityFeedRepository {
   @override
   Future<CityFeedInteraction?> createCityFeedInteraction(
     NewCityFeedInteraction interaction,
-  ) =>
+  ) async =>
       datasource.createCityFeedInteraction(
         interaction,
+      );
+
+  @override
+  Future<void> deleteCityFeedInteraction(
+    String interactionId,
+  ) async =>
+      datasource.deleteCityFeedInteraction(
+        interactionId,
       );
 }

@@ -52,10 +52,14 @@ class CityFeedDatasourceImpl implements CityFeedDatasource {
   ) async {
     final client = Supabase.instance.client;
 
-    final response = await client.from('city_feed_interaction').select().eq(
+    final response = await client
+        .from('city_feed_interaction')
+        .select()
+        .eq(
           'cityId',
           '$cityId',
-        );
+        )
+        .order('createdAt');
 
     if (response.isEmpty) return CityFeedInteractionFetch([]);
 
@@ -111,5 +115,17 @@ class CityFeedDatasourceImpl implements CityFeedDatasource {
     return CityFeedInteraction.fromMap(
       response.first,
     );
+  }
+
+  @override
+  Future<void> deleteCityFeedInteraction(
+    String interactionId,
+  ) async {
+    final supabaseClient = Supabase.instance.client;
+
+    await supabaseClient.from('city_feed_interaction').delete().eq(
+          'id',
+          interactionId,
+        );
   }
 }

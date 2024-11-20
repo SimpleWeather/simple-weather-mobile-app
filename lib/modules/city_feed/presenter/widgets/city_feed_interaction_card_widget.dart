@@ -46,12 +46,14 @@ class CityFeedInteractionCardWidget extends StatelessWidget {
           fontSize: 16,
         ),
       ),
-      trailing: IconButton(
-        onPressed: onTrailingTap,
-        icon: const Icon(
-          Icons.more_vert,
-        ),
-      ),
+      trailing: interaction.interactionIsFromCurrentUser
+          ? IconButton(
+              onPressed: onTrailingTap,
+              icon: const Icon(
+                Icons.more_vert,
+              ),
+            )
+          : null,
     );
   }
 }

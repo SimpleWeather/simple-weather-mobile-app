@@ -105,7 +105,11 @@ class _CityFeedPageState extends State<CityFeedPage> {
 
                       return CityFeedInteractionCardWidget(
                         interaction: interaction,
-                        onTrailingTap: () {},
+                        onTrailingTap: () async => showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          builder: (_) => Container(),
+                        ),
                       );
                     },
                   ),
