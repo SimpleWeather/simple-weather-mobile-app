@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../core/widgets/custom_snackbar.dart';
 import 'bloc/auth_bloc.dart';
 import 'bloc/auth_event.dart';
 import 'bloc/auth_state.dart';
 import 'view_models/auth_view_model.dart';
+import 'widgets/auth_input_widget.dart';
 
 class AuthPage<TViewModel extends AuthViewModel, TBloc extends AuthBloc>
     extends StatefulWidget {
@@ -33,14 +35,12 @@ class _AuthPageState<TViewModel extends AuthViewModel, TBloc extends AuthBloc>
   late final viewModel = Modular.get<TViewModel>();
   late final bloc = Modular.get<TBloc>();
 
-  void auth() {
-    bloc.add(
-      AuthSessionEvent(
-        email: viewModel.email.text,
-        password: viewModel.password.text,
-      ),
-    );
-  }
+  void auth() => bloc.add(
+        AuthSessionEvent(
+          email: viewModel.email.text,
+          password: viewModel.password.text,
+        ),
+      );
 
   bool get buttonIsEnabled => viewModel.buttonIsEnabled;
 
@@ -67,7 +67,23 @@ class _AuthPageState<TViewModel extends AuthViewModel, TBloc extends AuthBloc>
         body: BlocListener(
           bloc: bloc,
           listener: (_, state) {
+            if (state is AuthErrorState) {
+              showCustomSnackBarWidget(
+                context: context,
+                prefix: 'Falha na autenticação!\n',
+                message: state.message,
+                backgroundColor: Colors.red,
+                icon: Icons.warning_amber,
+              );
+            }
+
             if (state is AuthSuccessState) {
+              showCustomSnackBarWidget(
+                context: context,
+                message: 'Autenticado com sucesso!',
+                backgroundColor: Colors.green,
+              );
+
               Modular.to.pushReplacementNamed(
                 widget.successNavigationRoute,
               );
@@ -80,38 +96,17 @@ class _AuthPageState<TViewModel extends AuthViewModel, TBloc extends AuthBloc>
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                TextFormField(
+                AuthInputWidget(
                   controller: viewModel.email,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'Ex: user@mailprovider.com',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+                  label: 'Email',
+                  hint: 'Ex: user@mailprovider.com',
                 ),
                 const SizedBox(height: 20),
-                TextFormField(
+                AuthInputWidget(
                   controller: viewModel.password,
-                  decoration: InputDecoration(
-                    labelText: 'Senha',
-                    hintText: 'Senha de usuário',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+                  hasObscureText: true,
+                  label: 'Senha',
+                  hint: 'Senha de usuário',
                 ),
                 const SizedBox(height: 80),
                 AnimatedBuilder(
@@ -143,9 +138,15 @@ class _AuthPageState<TViewModel extends AuthViewModel, TBloc extends AuthBloc>
                 if (widget.secondaryButtonText != null &&
                     widget.secondaryButtonNavigationRoute != null)
                   TextButton(
-                    onPressed: () => Modular.to.pushNamed(
-                      widget.secondaryButtonNavigationRoute!,
-                    ),
+                    onPressed: () {
+                      viewModel
+                        ..email.clear()
+                        ..password.clear();
+
+                      Modular.to.pushNamed(
+                        widget.secondaryButtonNavigationRoute!,
+                      );
+                    },
                     child: Text(
                       widget.secondaryButtonText!,
                       style: const TextStyle(

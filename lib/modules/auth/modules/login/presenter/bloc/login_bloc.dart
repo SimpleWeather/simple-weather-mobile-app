@@ -21,8 +21,8 @@ class LoginBloc extends AuthBloc {
         password: event.password,
       ))
           .fold(
-        (exception) => AuthErrorState(
-          exception.toString(),
+        (_) => AuthErrorState(
+          'Ocorreu um erro ao tentar entrar em sua conta.',
         ),
         AuthSuccessState.new,
       ),
