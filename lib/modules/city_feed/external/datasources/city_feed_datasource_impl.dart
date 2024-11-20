@@ -53,7 +53,7 @@ class CityFeedDatasourceImpl implements CityFeedDatasource {
 
     final response = await client.from('city_feed_interaction').select().eq(
           'cityId',
-          cityId,
+          '$cityId',
         );
 
     if (response.isEmpty) return CityFeedInteractionFetch([]);
@@ -77,11 +77,13 @@ class CityFeedDatasourceImpl implements CityFeedDatasource {
           );
     }
 
+    final userCity = city.toUserCityFeedMap(
+      addedAt: DateTime.now(),
+      userId: supabaseClient.auth.currentUser!.id,
+    );
+
     await supabaseClient.from('user_cities').insert(
-          city.toUserCityFeedMap(
-            addedAt: DateTime.now(),
-            userId: supabaseClient.auth.currentUser!.id,
-          ),
+          userCity,
         );
   }
 }

@@ -15,7 +15,6 @@ class UserCityFetch {
 }
 
 class UserCity {
-  final String id;
   final String city;
   final String? uf;
   final String userId;
@@ -23,7 +22,6 @@ class UserCity {
   final int cityId;
 
   UserCity({
-    required this.id,
     required this.city,
     required this.userId,
     required this.addedAt,
@@ -32,11 +30,10 @@ class UserCity {
   });
 
   factory UserCity.fromMap(dynamic map) => UserCity(
-        id: map['id'],
+        cityId: map['cityId'],
         city: map['city'],
         userId: map['userId'],
         uf: map['uf'],
         addedAt: DateTime.parse(map['addedAt']),
-        cityId: map['cityId'],
       );
 }

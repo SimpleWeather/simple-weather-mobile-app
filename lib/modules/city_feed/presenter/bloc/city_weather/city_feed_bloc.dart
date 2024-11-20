@@ -6,6 +6,7 @@ import '../../../../home/domain/models/city_weather.dart';
 import '../../../domain/models/city_feed_interaction.dart';
 import '../../../domain/usecases/get_city_feed_interactions.dart';
 import '../../../domain/usecases/get_city_weather.dart';
+import '../../../domain/usecases/save_city_to_feed.dart';
 
 part 'city_feed_event.dart';
 part 'city_feed_state.dart';
@@ -18,6 +19,10 @@ class CityFeedBloc extends Bloc<CityFeedEvent, CityFeedState> {
 
     on<FetchCityFeedInteractionsEvent>(
       _fetchCityFeedInteractions,
+    );
+
+    on<AddCityToFeedEvent>(
+      _addToFeed,
     );
   }
 
@@ -52,6 +57,23 @@ class CityFeedBloc extends Bloc<CityFeedEvent, CityFeedState> {
           .fold(
         (exception) => CityFeedErrorState(exception.toString()),
         CityFeedSuccessState.new,
+      ),
+    );
+  }
+
+  Future<void> _addToFeed(
+    AddCityToFeedEvent event,
+    emit,
+  ) async {
+    emit(CityFeedLoadingState());
+
+    emit(
+      (await Modular.get<SaveCityToFeed>()(
+        event.city,
+      ))
+          .fold(
+        (exception) => CityFeedErrorState(exception.toString()),
+        (_) => SavedCityToFeedSuccessState(),
       ),
     );
   }

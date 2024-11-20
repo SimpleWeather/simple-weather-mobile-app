@@ -27,6 +27,11 @@ class _CityFeedPageState extends State<CityFeedPage> {
     );
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -36,6 +41,7 @@ class _CityFeedPageState extends State<CityFeedPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
+        backgroundColor: Colors.blueAccent,
         child: const Icon(
           Icons.add,
           color: Colors.white,
@@ -50,8 +56,23 @@ class _CityFeedPageState extends State<CityFeedPage> {
                 final feedInteractions =
                     state.cityFeedInteractions.feedInteractions;
 
+                if (feedInteractions.isEmpty) {
+                  return const Center(
+                    heightFactor: 7,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.ac_unit),
+                        Text('Não há interações ainda no feed desta cidade!'),
+                      ],
+                    ),
+                  );
+                }
+
                 return ListView.builder(
                   itemCount: feedInteractions.length,
+                  shrinkWrap: true,
                   itemBuilder: (_, index) => CityFeedInteractionCardWidget(
                     interaction: feedInteractions[index],
                   ),

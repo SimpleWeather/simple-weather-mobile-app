@@ -9,6 +9,8 @@ final class CityFeedInitialState extends CityFeedState {}
 
 final class CityFeedLoadingState extends CityFeedState {}
 
+final class SavedCityToFeedSuccessState extends CityFeedState {}
+
 final class CityWeatherSuccessState extends CityFeedState {
   final CityWeather cityWeather;
 

@@ -29,7 +29,7 @@ class _AddCityToFeedPageState extends State<AddCityToFeedPage> {
     return BlocListener(
       bloc: bloc,
       listener: (_, state) {
-        if (state is CityFeedSuccessState) {
+        if (state is SavedCityToFeedSuccessState) {
           Navigator.pop(context, true);
         }
       },
