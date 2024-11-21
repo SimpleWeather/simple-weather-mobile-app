@@ -15,7 +15,8 @@ class CityFeedInteractionCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onLongPress:
+          interaction.interactionIsFromCurrentUser ? onTrailingTap : null,
       leading: CircleAvatar(
         child: Text(
           interaction.creatorName.split('').first.toUpperCase(),

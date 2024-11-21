@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../home/domain/models/user_city.dart';
 import '../bloc/city_weather/city_feed_bloc.dart';
+import '../widgets/city_feed_interaction_card_bottom_sheet.dart';
 import '../widgets/city_feed_interaction_card_widget.dart';
 import 'create_city_interaction_bottom_sheet.dart';
 
@@ -67,7 +68,9 @@ class _CityFeedPageState extends State<CityFeedPage> {
 
             return Column(
               children: [
+                const SizedBox(height: 12),
                 if (cityWeather != null) ...{
+                  const Text('Máxima:'),
                   Text(
                     '${cityWeather.maxTemperature.toStringAsPrecision(2)} °C',
                     style: const TextStyle(
@@ -75,6 +78,8 @@ class _CityFeedPageState extends State<CityFeedPage> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  const SizedBox(height: 4),
+                  const Text('Mínima:'),
                   Text(
                     '${cityWeather.minTemperature.toStringAsPrecision(2)} °C',
                     style: const TextStyle(
@@ -83,6 +88,7 @@ class _CityFeedPageState extends State<CityFeedPage> {
                     ),
                   ),
                 },
+                const Divider(indent: 16, endIndent: 16),
                 if (feedInteractions.isEmpty)
                   const Center(
                     heightFactor: 7,
@@ -108,7 +114,13 @@ class _CityFeedPageState extends State<CityFeedPage> {
                         onTrailingTap: () async => showModalBottomSheet(
                           context: context,
                           backgroundColor: Colors.white,
-                          builder: (_) => Container(),
+                          builder: (_) => CityFeedInteractionCardBottomSheet(
+                            onDeleteTap: () => bloc.add(
+                              DeleteCityFeedInteraction(
+                                interaction.id,
+                              ),
+                            ),
+                          ),
                         ),
                       );
                     },

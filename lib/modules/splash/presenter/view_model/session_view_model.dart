@@ -8,39 +8,28 @@ enum AuthRequired {
 }
 
 abstract class SessionViewModel {
-  abstract final ValueNotifier<AuthRequired> logged;
-
-  Future<void> verifyUserSession();
-
-  void dispose();
+  Future<AuthRequired> verifyUserSession();
 }
 
 class SessionViewModelImpl implements SessionViewModel {
   @override
-  final ValueNotifier<AuthRequired> logged = ValueNotifier(AuthRequired.none);
-
-  @override
-  Future<void> verifyUserSession() async {
+  Future<AuthRequired> verifyUserSession() async {
     final session = Supabase.instance.client.auth.currentSession;
 
     if (session == null) {
-      logged.value = AuthRequired.requiredSignIn;
-      return;
+      return AuthRequired.requiredSignIn;
     }
 
     if (!session.isExpired) {
-      logged.value = AuthRequired.logged;
-
       if (kDebugMode) {
         print('Entrou como ${session.user.email} - ${session.user.id}');
         print(
             'Sessão expira em ${((session.expiresIn ?? 0) / 60).round()} minutos');
       }
-    }
-  }
 
-  @override
-  void dispose() {
-    logged.dispose();
+      return AuthRequired.logged;
+    }
+
+    return AuthRequired.none;
   }
 }
