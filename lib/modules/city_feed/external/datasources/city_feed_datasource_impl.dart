@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:simple_weather/modules/city_feed/domain/models/city_feed_interaction.dart';
+import 'package:simple_weather/modules/city_feed/domain/models/new_city_feed_interaction.dart';
 import 'package:simple_weather/modules/home/domain/models/city_weather.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -51,10 +52,14 @@ class CityFeedDatasourceImpl implements CityFeedDatasource {
   ) async {
     final client = Supabase.instance.client;
 
-    final response = await client.from('city_feed_interaction').select().eq(
+    final response = await client
+        .from('city_feed_interaction')
+        .select()
+        .eq(
           'cityId',
-          cityId,
-        );
+          '$cityId',
+        )
+        .order('createdAt');
 
     if (response.isEmpty) return CityFeedInteractionFetch([]);
 
@@ -77,11 +82,50 @@ class CityFeedDatasourceImpl implements CityFeedDatasource {
           );
     }
 
+    final userCity = city.toUserCityFeedMap(
+      addedAt: DateTime.now(),
+      userId: supabaseClient.auth.currentUser!.id,
+    );
+
     await supabaseClient.from('user_cities').insert(
-          city.toUserCityFeedMap(
-            addedAt: DateTime.now(),
-            userId: supabaseClient.auth.currentUser!.id,
+          userCity,
+        );
+  }
+
+  @override
+  Future<CityFeedInteraction?> createCityFeedInteraction(
+    NewCityFeedInteraction interaction,
+  ) async {
+    final supabaseClient = Supabase.instance.client;
+
+    final user = supabaseClient.auth.currentUser!;
+
+    final response = await supabaseClient
+        .from('city_feed_interaction')
+        .insert(
+          interaction.toMap(
+            creatorId: user.id,
+            creatorName: user.email!.split('@').first,
           ),
+        )
+        .select();
+
+    if (response.isEmpty) return null;
+
+    return CityFeedInteraction.fromMap(
+      response.first,
+    );
+  }
+
+  @override
+  Future<void> deleteCityFeedInteraction(
+    String interactionId,
+  ) async {
+    final supabaseClient = Supabase.instance.client;
+
+    await supabaseClient.from('city_feed_interaction').delete().eq(
+          'id',
+          interactionId,
         );
   }
 }

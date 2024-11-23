@@ -9,6 +9,8 @@ final class CityFeedInitialState extends CityFeedState {}
 
 final class CityFeedLoadingState extends CityFeedState {}
 
+final class SavedCityToFeedSuccessState extends CityFeedState {}
+
 final class CityWeatherSuccessState extends CityFeedState {
   final CityWeather cityWeather;
 
@@ -20,14 +22,19 @@ final class CityWeatherSuccessState extends CityFeedState {
       ];
 }
 
-final class CityFeedSuccessState extends CityFeedState {
+final class CityFeedInfoSuccessState extends CityFeedState {
   final CityFeedInteractionFetch cityFeedInteractions;
+  final CityWeather? cityWeather;
 
-  CityFeedSuccessState(this.cityFeedInteractions);
+  CityFeedInfoSuccessState({
+    required this.cityFeedInteractions,
+    required this.cityWeather,
+  });
 
   @override
   List<Object?> get props => [
         cityFeedInteractions,
+        cityWeather,
       ];
 }
 

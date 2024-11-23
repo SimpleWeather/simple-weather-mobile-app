@@ -13,4 +13,12 @@ class UserCitiesRepositoryImpl implements UserCitiesRepository {
       datasource.getUserCities(
         userId,
       );
+
+  @override
+  Future<void> removeUserCity(
+    int cityId,
+  ) async =>
+      datasource.removeUserCity(
+        cityId,
+      );
 }

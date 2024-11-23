@@ -1,8 +1,17 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:http/http.dart';
 
 import '../city_feed/city_feed_module.dart';
+import '../city_feed/domain/repositories/city_feed_repository.dart';
+import '../city_feed/domain/usecases/get_city_weather.dart';
+import '../city_feed/domain/usecases/save_city_to_feed.dart';
+import '../city_feed/external/datasources/city_feed_datasource_impl.dart';
+import '../city_feed/infra/datasources/city_feed_datasource.dart';
+import '../city_feed/infra/repositories/city_feed_repository_impl.dart';
+import '../city_feed/presenter/bloc/city_weather/city_feed_bloc.dart';
 import 'domain/repositories/user_cities_repository.dart';
 import 'domain/usecases/get_user_cities.dart';
+import 'domain/usecases/remove_user_city.dart';
 import 'external/datasources/user_cities_datasource_impl.dart';
 import 'external/drivers/weather_driver_impl.dart';
 import 'infra/datasources/user_cities_datasource.dart';
@@ -34,6 +43,27 @@ class HomeModule extends Module {
     );
     i.add<GetUserCities>(
       GetUserCitiesImpl.new,
+    );
+    i.add<Client>(
+      Client.new,
+    );
+    i.add<CityFeedDatasource>(
+      CityFeedDatasourceImpl.new,
+    );
+    i.add<CityFeedRepository>(
+      CityFeedRepositoryImpl.new,
+    );
+    i.add<GetCityWeather>(
+      GetCityWeatherImpl.new,
+    );
+    i.add<RemoveUserCity>(
+      RemoveUserCityImpl.new,
+    );
+    i.addLazySingleton<SaveCityToFeed>(
+      SaveCityToFeedImpl.new,
+    );
+    i.add<CityFeedBloc>(
+      CityFeedBloc.new,
     );
 
     super.binds(i);

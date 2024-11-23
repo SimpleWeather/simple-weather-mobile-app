@@ -22,7 +22,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox.shrink(),
-        title: const Text('Weather IO'),
+        title: const Text(
+          'Weather IO',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -87,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                                 TextButton(
                                   onPressed: () => Modular.to
                                       .pushNamed(
-                                    '/addCityToFeedPage/',
+                                    './addCityToFeedPage',
                                     arguments: viewModel.textController.text,
                                   )
                                       .then((result) {
@@ -102,16 +107,23 @@ class _HomePageState extends State<HomePage> {
                         )
                       else ...{
                         const SizedBox(height: 14),
-                        Expanded(
-                          child: ListView.separated(
-                            itemCount: cities.length,
-                            shrinkWrap: true,
-                            separatorBuilder: (_, __) =>
-                                const SizedBox(height: 10),
-                            itemBuilder: (_, index) => CityWeatherWidget(
-                              userCity: cities[index],
-                            ),
-                          ),
+                        ListView.separated(
+                          itemCount: cities.length,
+                          shrinkWrap: true,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (_, index) {
+                            final city = cities[index];
+
+                            return CityWeatherWidget(
+                              userCity: city,
+                              onDeleteTap: () => viewModel.bloc.add(
+                                RemoveUserCityEvent(
+                                  city.cityId,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         const SizedBox(height: 10),
                       },

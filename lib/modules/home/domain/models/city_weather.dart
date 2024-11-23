@@ -50,9 +50,7 @@ class CityWeather {
     required this.city,
   });
 
-  static double get _kelvin => 273.15;
-
-  static double _convert(String temp) => double.tryParse(temp) ?? 0 - _kelvin;
+  static double _convertToCelcius(double temp) => temp - 273.15;
 
   IconData? get weatherIcon {
     final mainText = weather.content.firstOrNull?.mainText;
@@ -115,13 +113,19 @@ class CityWeather {
       weather: WeatherFetch.fromJson(
         json[CityWeatherConstants.weather],
       ),
-      temperature: main[CityWeatherConstants.temp],
-      feelsLike: main[CityWeatherConstants.feelsLike],
-      maxTemperature: _convert(
-        main[CityWeatherConstants.maxTemperature].toString(),
+      temperature: _convertToCelcius(
+        double.tryParse(main[CityWeatherConstants.temp].toString()) ?? 0,
       ),
-      minTemperature: _convert(
-        main[CityWeatherConstants.minTemperature].toString(),
+      feelsLike: _convertToCelcius(
+        double.tryParse(main[CityWeatherConstants.feelsLike].toString()) ?? 0,
+      ),
+      maxTemperature: _convertToCelcius(
+        double.tryParse(main[CityWeatherConstants.maxTemperature].toString()) ??
+            0,
+      ),
+      minTemperature: _convertToCelcius(
+        double.tryParse(main[CityWeatherConstants.minTemperature].toString()) ??
+            0,
       ),
       humidity: (main[CityWeatherConstants.humidity] as int).toDouble(),
       city: json[CityWeatherConstants.name],

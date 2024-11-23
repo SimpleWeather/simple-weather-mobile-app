@@ -14,18 +14,14 @@ class _SplashPageState extends State<SplashPage> {
   final sessionViewModel = Modular.get<SessionViewModel>();
 
   @override
-  void initState() {
-    sessionViewModel.verifyUserSession();
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ValueListenableBuilder(
-          valueListenable: sessionViewModel.logged,
-          builder: (_, value, __) {
+      body: FutureBuilder(
+          initialData: AuthRequired.none,
+          future: sessionViewModel.verifyUserSession(),
+          builder: (_, snapshot) {
+            final value = snapshot.data;
+
             if (value == AuthRequired.logged) {
               Modular.to.pushReplacementNamed('../home/');
             }
@@ -43,11 +39,5 @@ class _SplashPageState extends State<SplashPage> {
             );
           }),
     );
-  }
-
-  @override
-  void dispose() {
-    sessionViewModel.dispose();
-    super.dispose();
   }
 }

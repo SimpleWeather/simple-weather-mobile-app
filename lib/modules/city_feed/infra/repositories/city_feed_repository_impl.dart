@@ -1,4 +1,5 @@
 import 'package:simple_weather/modules/city_feed/domain/models/city_feed_interaction.dart';
+import 'package:simple_weather/modules/city_feed/domain/models/new_city_feed_interaction.dart';
 import 'package:simple_weather/modules/home/domain/models/city_weather.dart';
 
 import '../../domain/repositories/city_feed_repository.dart';
@@ -33,5 +34,21 @@ class CityFeedRepositoryImpl implements CityFeedRepository {
   Future<void> saveCityToFeed(CityWeather city) async =>
       datasource.saveCityToFeed(
         city,
+      );
+
+  @override
+  Future<CityFeedInteraction?> createCityFeedInteraction(
+    NewCityFeedInteraction interaction,
+  ) async =>
+      datasource.createCityFeedInteraction(
+        interaction,
+      );
+
+  @override
+  Future<void> deleteCityFeedInteraction(
+    String interactionId,
+  ) async =>
+      datasource.deleteCityFeedInteraction(
+        interactionId,
       );
 }

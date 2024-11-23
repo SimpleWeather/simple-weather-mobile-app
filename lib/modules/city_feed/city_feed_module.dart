@@ -2,6 +2,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart';
 
 import 'domain/repositories/city_feed_repository.dart';
+import 'domain/usecases/create_city_feed_interaction.dart';
+import 'domain/usecases/delete_city_feed_interaction.dart' as delete;
 import 'domain/usecases/get_city_feed_interactions.dart';
 import 'domain/usecases/get_city_weather.dart';
 import 'external/datasources/city_feed_datasource_impl.dart';
@@ -31,6 +33,14 @@ class CityFeedModule extends Module {
 
     i.add<GetCityFeedInteractions>(
       GetCityFeedInteractionsImpl.new,
+    );
+
+    i.add<CreateCityFeedInteraction>(
+      CreateCityFeedInteractionImpl.new,
+    );
+
+    i.add<delete.DeleteCityFeedInteraction>(
+      delete.DeleteCityFeedInteractionImpl.new,
     );
 
     super.binds(i);
