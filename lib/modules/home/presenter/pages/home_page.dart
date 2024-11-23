@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                               userCity: city,
                               onDeleteTap: () => viewModel.bloc.add(
                                 RemoveUserCityEvent(
-                                  city.cityId,
+                                  city.id,
                                 ),
                               ),
                             );

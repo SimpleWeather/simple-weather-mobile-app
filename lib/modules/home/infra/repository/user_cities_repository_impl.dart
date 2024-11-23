@@ -16,9 +16,9 @@ class UserCitiesRepositoryImpl implements UserCitiesRepository {
 
   @override
   Future<void> removeUserCity(
-    int cityId,
+    String id,
   ) async =>
       datasource.removeUserCity(
-        cityId,
+        id,
       );
 }

@@ -88,7 +88,7 @@ class SavedCityWeatherBloc
 
     emit(
       (await Modular.get<RemoveUserCity>().call(
-        event.cityId,
+        event.id,
       ))
           .fold(
         (exception) => SavedCityWeatherErrorState(
@@ -98,7 +98,7 @@ class SavedCityWeatherBloc
           savedCities = UserCityFetch(
             savedCities.cities
               ..removeWhere(
-                (city) => city.cityId == event.cityId,
+                (city) => city.id == event.id,
               ),
           );
 

@@ -18,7 +18,7 @@ final class SearchCityEvent extends SavedCityWeatherEvent {
 }
 
 final class RemoveUserCityEvent extends SavedCityWeatherEvent {
-  final int cityId;
+  final String id;
 
-  RemoveUserCityEvent(this.cityId);
+  RemoveUserCityEvent(this.id);
 }

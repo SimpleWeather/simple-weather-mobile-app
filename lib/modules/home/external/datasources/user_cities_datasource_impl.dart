@@ -19,9 +19,9 @@ class UserCitiesDatasourceImpl implements UserCitiesDatasource {
   }
 
   @override
-  Future<void> removeUserCity(int cityId) async {
+  Future<void> removeUserCity(String id) async {
     final client = Supabase.instance.client;
 
-    await client.from('user_cities').delete().eq('cityId', cityId);
+    await client.from('user_cities').delete().eq('id', id);
   }
 }
