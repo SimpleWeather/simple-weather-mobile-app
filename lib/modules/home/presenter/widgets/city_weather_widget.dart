@@ -5,10 +5,12 @@ import '../../domain/models/user_city.dart';
 
 class CityWeatherWidget extends StatefulWidget {
   final UserCity userCity;
+  final VoidCallback onDeleteTap;
 
   const CityWeatherWidget({
     super.key,
     required this.userCity,
+    required this.onDeleteTap,
   });
 
   @override
@@ -32,6 +34,13 @@ class _CityWeatherWidgetState extends State<CityWeatherWidget> {
       ),
       title: Text(
         widget.userCity.city,
+      ),
+      trailing: IconButton(
+        onPressed: widget.onDeleteTap,
+        icon: const Icon(
+          Icons.delete,
+          color: Colors.red,
+        ),
       ),
     );
   }

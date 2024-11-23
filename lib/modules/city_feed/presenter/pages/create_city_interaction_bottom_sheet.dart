@@ -24,11 +24,22 @@ class _CreateCityInteractionBottomSheetState
     final size = MediaQuery.sizeOf(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: size.height * .85,
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: MediaQuery.viewInsetsOf(context).bottom,
+      ),
+      height: size.height * .8,
       width: size.width,
       child: Column(
         children: [
+          const SizedBox(height: 20),
+          const Text(
+            'Diga algo sobre a cidade',
+            style: TextStyle(
+              fontSize: 26,
+            ),
+          ),
           const SizedBox(height: 20),
           TextFormField(
             controller: controller,
@@ -48,20 +59,42 @@ class _CreateCityInteractionBottomSheetState
             ),
           ),
           const Spacer(),
-          FilledButton(
-            style: const ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(
-                Colors.blueAccent,
-              ),
-            ),
-            onPressed: () {
-              widget.onConfirmTap(controller.text);
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Confirmar',
-            ),
-          ),
+          ValueListenableBuilder(
+              valueListenable: controller,
+              builder: (context, value, _) {
+                final enabled = value.text.isNotEmpty;
+
+                return SizedBox(
+                  width: 270,
+                  height: 50,
+                  child: FilledButton(
+                    style: ButtonStyle(
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            4,
+                          ),
+                        ),
+                      ),
+                      backgroundColor: WidgetStatePropertyAll(
+                        enabled ? Colors.blueAccent : Colors.grey[400],
+                      ),
+                    ),
+                    onPressed: () {
+                      if (!enabled) return;
+
+                      widget.onConfirmTap(controller.text);
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'Confirmar',
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                );
+              }),
           const SizedBox(height: 30),
         ],
       ),

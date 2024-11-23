@@ -35,7 +35,19 @@ class _AddCityToFeedPageState extends State<AddCityToFeedPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.searchedCity),
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.chevron_left,
+              color: Colors.white,
+            ),
+          ),
+          title: Text(
+            widget.searchedCity,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
           actions: [
             BlocBuilder(
                 bloc: bloc,
@@ -64,11 +76,42 @@ class _AddCityToFeedPageState extends State<AddCityToFeedPage> {
             if (state is CityWeatherSuccessState) {
               final cityWeather = state.cityWeather;
 
-              return Column(
-                children: [
-                  Text(cityWeather.id.toString()),
-                  Text('Feels like: ${cityWeather.feelsLike}'),
-                ],
+              return Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    Icon(
+                      cityWeather.weatherIcon,
+                      size: 42,
+                    ),
+                    const SizedBox(height: 12),
+                    const Text('Máxima:'),
+                    Text(
+                      '${cityWeather.maxTemperature.toStringAsPrecision(2)} °C',
+                      style: const TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text('Mínima:'),
+                    Text(
+                      '${cityWeather.minTemperature.toStringAsPrecision(2)} °C',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Sensação térmica de: ${cityWeather.feelsLike.toStringAsPrecision(2)} °C',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
 

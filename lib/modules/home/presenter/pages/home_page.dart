@@ -22,7 +22,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox.shrink(),
-        title: const Text('Weather IO'),
+        title: const Text(
+          'Weather IO',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -107,9 +112,18 @@ class _HomePageState extends State<HomePage> {
                           shrinkWrap: true,
                           separatorBuilder: (_, __) =>
                               const SizedBox(height: 10),
-                          itemBuilder: (_, index) => CityWeatherWidget(
-                            userCity: cities[index],
-                          ),
+                          itemBuilder: (_, index) {
+                            final city = cities[index];
+
+                            return CityWeatherWidget(
+                              userCity: city,
+                              onDeleteTap: () => viewModel.bloc.add(
+                                RemoveUserCityEvent(
+                                  city.cityId,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         const SizedBox(height: 10),
                       },

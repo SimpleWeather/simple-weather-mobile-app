@@ -17,4 +17,11 @@ class UserCitiesDatasourceImpl implements UserCitiesDatasource {
 
     return UserCityFetch.fromMap(response);
   }
+
+  @override
+  Future<void> removeUserCity(int cityId) async {
+    final client = Supabase.instance.client;
+
+    await client.from('user_cities').delete().eq('cityId', cityId);
+  }
 }

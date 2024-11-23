@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../../../../../core/utils/filter_by_word_start.dart';
 import '../../../domain/models/user_city.dart';
 import '../../../domain/usecases/get_user_cities.dart';
+import '../../../domain/usecases/remove_user_city.dart';
 
 part 'saved_city_weather_event.dart';
 part 'saved_city_weather_state.dart';
@@ -12,9 +13,17 @@ part 'saved_city_weather_state.dart';
 class SavedCityWeatherBloc
     extends Bloc<SavedCityWeatherEvent, SavedCityWeatherState> {
   SavedCityWeatherBloc() : super(SavedCityWeatherInitialState()) {
-    on<FetchSavedCitiesWeatherEvent>(_fetchSavedCities);
+    on<FetchSavedCitiesWeatherEvent>(
+      _fetchSavedCities,
+    );
 
-    on<SearchCityEvent>(_searchCity);
+    on<SearchCityEvent>(
+      _searchCity,
+    );
+
+    on<RemoveUserCityEvent>(
+      _removeUserCity,
+    );
   }
 
   UserCityFetch savedCities = UserCityFetch([]);
@@ -67,6 +76,36 @@ class SavedCityWeatherBloc
     emit(
       SavedCityWeatherSuccessState(
         event.cityQuery.isEmpty ? savedCities : found,
+      ),
+    );
+  }
+
+  Future<void> _removeUserCity(
+    RemoveUserCityEvent event,
+    emit,
+  ) async {
+    emit(SavedCityWeatherLoadingState());
+
+    emit(
+      (await Modular.get<RemoveUserCity>().call(
+        event.cityId,
+      ))
+          .fold(
+        (exception) => SavedCityWeatherErrorState(
+          exception.toString(),
+        ),
+        (_) {
+          savedCities = UserCityFetch(
+            savedCities.cities
+              ..removeWhere(
+                (city) => city.cityId == event.cityId,
+              ),
+          );
+
+          return SavedCityWeatherSuccessState(
+            savedCities,
+          );
+        },
       ),
     );
   }

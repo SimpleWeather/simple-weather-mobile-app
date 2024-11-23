@@ -17,6 +17,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
+          initialData: AuthRequired.none,
           future: sessionViewModel.verifyUserSession(),
           builder: (_, snapshot) {
             final value = snapshot.data;

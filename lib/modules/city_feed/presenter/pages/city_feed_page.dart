@@ -33,8 +33,18 @@ class _CityFeedPageState extends State<CityFeedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.chevron_left,
+            color: Colors.white,
+          ),
+        ),
         title: Text(
           widget.userCity.city,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -70,6 +80,12 @@ class _CityFeedPageState extends State<CityFeedPage> {
               children: [
                 const SizedBox(height: 12),
                 if (cityWeather != null) ...{
+                  const SizedBox(height: 12),
+                  Icon(
+                    cityWeather.weatherIcon,
+                    size: 42,
+                  ),
+                  const SizedBox(height: 11.5),
                   const Text('Máxima:'),
                   Text(
                     '${cityWeather.maxTemperature.toStringAsPrecision(2)} °C',
@@ -82,6 +98,14 @@ class _CityFeedPageState extends State<CityFeedPage> {
                   const Text('Mínima:'),
                   Text(
                     '${cityWeather.minTemperature.toStringAsPrecision(2)} °C',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 10.5),
+                  Text(
+                    'Sensação térmica de: ${cityWeather.feelsLike.toStringAsPrecision(2)} °C',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
