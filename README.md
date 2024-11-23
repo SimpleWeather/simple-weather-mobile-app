@@ -17,4 +17,28 @@ informações que muitas vezes não são relevantes para grande parte dos usuár
 
 - Sergio Martins Fernandes
 
+### Camadas do APP
+
+```
+modules/
+    [feature]/
+      domain/
+        models/
+        usecases/
+        repositories/
+      infra/
+        datasources/
+        repositories/
+      external/
+        datasources/
+      presenter/
+        bloc/
+        pages/
+        widgets/
+```
+
+#### Inspiração principal da arquitetura:
+
+<img src='https://github.com/Flutterando/Clean-Dart/raw/master/imgs/img1.png'/>
+
 ![img.png](assets/img.png)
