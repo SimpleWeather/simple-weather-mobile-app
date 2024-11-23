@@ -7,6 +7,12 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.blueAccent,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       title: 'SimpleWeather',
       routerConfig: Modular.routerConfig,

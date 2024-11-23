@@ -1,16 +1,20 @@
-# simple_weather
+# Simple Weather
 
-A new Flutter project.
+O projeto consiste em um software a ser desenvolvido ao longo do segundo semestre de 2024 para a
+disciplina de Tópicos em Engenharia de Software. Será um aplicativo que permitirá ao usuário **pesquisar por
+informações climáticas** de cidades, podendo também armazenar ou remover cidades de um histórico armazenado
+internamente no dispositivo e tendo acesso a informações relacionadas às estimativas climáticas para os próximos
+dias. O objetivo é que o aplicativo seja o mais **simples e prático** possível para um usuário comum, escapando de
+informações que muitas vezes não são relevantes para grande parte dos usuários.
 
-## Getting Started
+### Discentes
 
-This project is a starting point for a Flutter application.
+- Amanda Bandeira Aragão Rigaud Lima
+- Felipe Azevedo Ribeiro
+- Guilherme Heriques Almeida
 
-A few resources to get you started if this is your first Flutter project:
+### Docente
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Sergio Martins Fernandes
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![img.png](assets/img.png)
