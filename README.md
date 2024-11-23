@@ -17,6 +17,12 @@ informações que muitas vezes não são relevantes para grande parte dos usuár
 
 - Sergio Martins Fernandes
 
+### Principais bibliotecas/frameworks
+
+- [Flutter](https://flutter.dev)
+- [Flutter BLoC](https://pub.dev/packages/flutter_bloc) --> Padrão de gerenciamento de estado
+- [Flutter Modular](https://pub.dev/packages/flutter_modular) --> Gerenciamento de rotas e injeção de dependências
+
 ### Camadas do APP
 
 ```
